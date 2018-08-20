@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+		
+	</head>
+	<body>
+		
+		
+		
+		
+		<script type="text/javascript">
+			
+			var s = '';
+			
+			function ce(){
+				dcv();
+				var b = $('#yanse').val();
+				if (b != null &&b != '') {
+					$('#addShi').css('color',b)
+				}else{
+					dcs();
+				}
+			};
+			
+			/**
+			 * 这个才是重点
+			 */
+			function dcs(){
+				var a=[];//数组为了接收参数
+				
+				var b = $('input[name=ceshi]');//拿到参数组
+				
+				var c = document.getElementById('addShi');//这个没有用的我自己的演示而己
+				/***
+				 * 这个是取出参数存到数组里这个是for循环
+				 */
+				for (var i = 0; i < b.length; i++) {
+					a.push(b[i].value);
+				}
+				//以下的是我自己的一个演示不多说了
+				var c1 = Math.floor(Math.random()*(b.length+1));
+					c.style.color = a[c1];
+			};
+			
+			
+			/**
+			 * 动态参数传法
+			 * @param {Object} a
+			 */
+			function dcd(a){
+				var b='';
+				for (var i = 0; i < a.length; i++) {
+					b+='<input type="hidden" name="ceshi" id="ceshi" value="'+a[i]+'" />';
+					
+				}
+				return b;
+			}
+			
+			
+			/**
+			 * 插入你想要传的参数
+			 */
+			function dcv(){
+				var a= ["#820041","#600000","#750000","#6F00D2","#003D79","#007979","#01814A","#009100","#00CACA","#02F78E","#2894FF","#4DFFFF","#7AFEC6"];
+				
+				var bv = dcd(a);//这个就是我刚才的哪个动态传参
+				
+				$('#colort').append(bv);//这个是为了当前页面接收而准备的
+			};
+			
+			function yi(){
+				if (s) {
+					clearInterval(s);
+				}
+				dcv();
+				s=setInterval(dcs,1000);//这就是计时器的传参
+				
+			};
+		</script>
+		
+		<span id="addShi">
+			中国旅游团已经很少再到这个田园诗般的热带群岛
+		</span>
+		<div id="colort" style="display: none;">
+			
+		</div>
+		 <input type="text" name="yanse" id="yanse" value="" />
+		
+		<input type="button" id="" value="试验" onclick="yi();" />
+		
+		
+		
+		
+		
+		
+		
+	</body>
+</html>
