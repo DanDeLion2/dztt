@@ -1,0 +1,1456 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>工序设置</title>
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/cj/gongxushezhi.css">
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/go.js" charset="utf-8"></script>
+		<!-- <script src="http://jqueryplugins.qiniudn.com/go.js"></script> -->
+    	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.9.1.min.js" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+		var xxx;
+		$(function(){
+			$('#dierbuname').val('');
+			$(".caozuotishi").hover(function(){
+	            $(".tishi").show();
+	        },function(){
+	            $(".tishi").hide();
+	        })
+	        $(".tishi").hover(function(){
+	            $(".tishi").show();
+	        },function(){
+	            $(".tishi").hide();
+	        })
+	        
+			var divinfo;
+            $('#quxiao').click(function(){
+                /* alert('取消'); */
+                divinfo=document.getElementById("divinfo");
+                divinfo.style.display="none";
+            });
+            $('.renyuan').click(function(){
+            	var scx_name=document.getElementById("scxname").innerText;
+            	/* alert(document.getElementById("scxname").innerText); */
+            	var bumenName = $('#dierbuname').val();
+            	 /* var bumenName = $('#dierbuname').val();
+            	myDiagram.model.findNodeDataForKey('gongxu');
+            	console.info(myDiagram.model.findNodeDataForKey('gongxu'));
+            	alert('+++++++++++++++++++'+myDiagram.model.findNodeDataForKey('gongxu'));  */
+            	//用例获取选中的节点或线
+            	/* var values;
+            	var objList=myDiagram.selection;
+            	objList.each(function(val) {
+            	values=val.data;
+            	values=val; */
+            	/* 切割字符串 */
+            	/* var rt= /(.+)?(?:\(|（)(.+)(?=\)|）)/.exec(values);
+            	
+            	alert('截取后：'+rt[2]); */
+            	/* console.log(rt[1]); */
+            	/* console.log(rt[2]); */
+            	/* $('#gxmc').style.color=""; */
+            	/* document.getElementById("gxmc").value = rt[2];
+            	}); */
+            	
+            	
+            	
+				/* $.ajax({
+					type:"post",
+					url:"queryBuMenRenYuan",
+					data :{
+						bumenName :bumenName,
+					},
+					success : function(result){
+						
+						if(result.length==0){
+							alert("没有人员，请去添加人员！！！")
+						}else{
+							var renyuan = '';
+							$.each(result, function(i,v) {
+							renyuan = '<input type="checkbox" name="three" value="'+v+'"/>'+v;
+							$('#renyuanliebiao').append(renyuan);
+						});
+						}
+					}
+				}); */
+				
+            	/* $.ajax({
+    				url:"select_gw_ry",
+    				type:"post",
+    				data:{
+    					scx_name:scxname,
+    					gongxu:bumenName
+    				},success:function(data){
+    					//alert(data[0]);
+    					//
+    						var b='';
+    						for(var i=0;i<data.length;i++){
+    								var zhi = data[i];
+    								b+=zhi+",";
+    							}
+    						b=b.slice(0,b.length-1);
+    						sp.text(b);
+    						var newstring = b.replace(/,/g,'<br>');
+    						ry.html(newstring);
+    					
+    				}
+    			}) */
+
+            });
+            //第二部保存
+            var submit;//保存按钮
+            $('#submit').on('click',function(){
+            	var path=$('#path').val();
+  			  	var gxs=document.getElementById("dierbuname").value;
+  			  	var gxsz=$('#gxsz').val();
+  			  	var jieduan=$('#jieduan').val();
+  			  	var gongshi=$('#gongshi').val();
+  			  	var pindu=$('#pindu').val();
+  			  	var beizhu=$('#beizhu').val();
+  			  	var qgx=$('#qgx').val();
+  			  	var hgx=$('#hgx').val();
+  			  	var renyuan=$('#renyuan').val();
+  			  	if(!/[^\s]+/.test(gxs)){
+  			  		alert('未选择生产线！');
+  			  		return;
+  			  	} 
+  			  	if(!/[^\s]+/.test(gxsz)){
+			  		alert('未选择工序！');
+			  		return;
+			  	}
+  			  	if(gxsz =='请选择工序'){
+			  		alert('未选择工序！');
+			  		return;
+			  	}
+  			  	if(!/[^\s]+/.test(qgx)){
+  			  		alert('未设置前工序！');
+  			  		return;
+  			  	} 
+			    if(!/[^\s]+/.test(hgx)){
+			    	alert('未设置后工序！');
+			    	return;
+			    } 
+			    var path=$('#path').val();
+			    $.ajax({
+			    	url:path+'/gongxu/setProcess',
+			    	data:{'gxs':gxs,'gxsz':gxsz,'jieduan':jieduan,'gongshi':gongshi,'pindu':pindu,'beizhu':beizhu,'qgx':qgx,'hgx':hgx,'renyuan':renyuan},
+			    	type:'post',
+			    	dataType:'json',
+			    	success:function(data){
+			    		confirm(data.success);
+			    	}
+			    });
+  			    
+            });
+           /*  $('.gongxu').click(function(){
+            	alert('请选择工序！');
+            }); */
+			/* var gongxu=new Array(); */
+			//删除所选的工序
+			/* $('#gongxu_shanchu').on('click',function(){
+					
+					$("input[name='xz_sc']:checked").map(function(){
+						xxx=$(this).next().text();
+						var b = '<li>'+"<input type='checkbox' name='xz_tj'><span>"+$(this).next().text()+'</span>&nbsp&nbsp&nbsp'+'</li>';
+						$('.pp').append(b);
+						$(this).parent('li').remove();
+						
+					});
+					
+			}) */
+			//添加所选的工序
+			 /* $('#gongxu_tianjia').on('click',function(){
+				$("input[name='xz_tj']:checked").map(function(){
+						var b = '<li>'+"<input type='checkbox' name='xz_sc'><span>"+$(this).next().text()+'</span>&nbsp&nbsp&nbsp'+'</li>';
+						$('.ff').append(b);
+						$(this).parent('li').remove();
+						
+				});
+			}) */ 
+		})
+		  function init() {
+			
+		    if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
+		    var $ = go.GraphObject.make;  // for conciseness in defining templates
+		    //禁用Ctrl
+		    /* myDiagram.commandHandler.doKeyDown=function(){
+				var e= myDiagram.lastInput;
+				var control =e.control || e.meta;
+				var key=e.Key;
+				if(control &&(key ==='Z' || key ==='C' || key === 'V'))return;
+				go.CommandHandler.prototype.dokeyDown.call(this);
+			}  */
+			
+		    myDiagram =
+		      $(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
+		        {
+		    	  initialAutoScale: go.Diagram.Uniform,
+		          initialContentAlignment: go.Spot.Center,
+		          allowCopy: false,//禁用复制
+		          layout:// position all of the nodes and route all of the links
+		              $(go.LayeredDigraphLayout,
+		                { direction: 90,
+		                  layerSpacing: 10,
+		                  columnSpacing: 15,
+		                  setsPortSpots: false }),
+		          allowDrop: true,  // must be true to accept drops from the Palette
+		          "LinkDrawn": showLinkLabel,  // this DiagramEvent listener is defined below
+		          "LinkRelinked": showLinkLabel,
+		          "animationManager.duration": 800, // slightly longer than default (600ms) animation
+		          "undoManager.isEnabled": true, // enable undo & redo,
+		          "validCycle":go.Diagram.CycleDestinationTree//go.Diagram.CycleNotDirected
+		        });
+		
+		    // when the document is modified, add a "*" to the title and enable the "Save" button
+		    myDiagram.addDiagramListener("Modified", function(e) {
+		      var button = document.getElementById("SaveButton");
+		      if (button) button.disabled = !myDiagram.isModified;
+		      var idx = document.title.indexOf("(未保存，可撤销！)");
+		      if (myDiagram.isModified) {
+		        if (idx < 0) document.title += "(未保存，可撤销！)";
+		      } else {
+		        if (idx >= 0) document.title = document.title.substr(0, idx);
+		      }
+		    });
+		    /* function hhh(){
+		    	var iii='SelectionDeleted';
+		    	return iii;
+		    } */
+		    //删除
+		    myDiagram.addDiagramListener("SelectionDeleting",function(e){
+		    	var sc;
+		    	var jq = jQuery.noConflict();
+		    	var pa=jq('#path').val;
+		    	var gxs=document.getElementById("dierbuname").value;
+		    	e.subject.each(function(n){
+		    		sc=n.data;
+		    		/* console.info('key:'+n.data.key); */
+		    		if(n.data.key == "开始" || n.data.key == "结束") {
+			       		return;
+		    		}
+		    		var path=jq('#path').val();
+		    		jq.ajax({
+		    			url:path+'/gongxu/scgx.json',
+		    			data:{'scgx':n.data.key,'scx':gxs},
+		    			type:'post',
+		    			datatype:'json',
+		    			success:function(data){
+		    				/* console.info(data); */
+		    				
+		    				jq('.gongxu_mc').val(gxs);
+
+              				jq('.pp').children("li").remove();
+							jq.each(data, function(dex,ob){
+	                              /*  alert(ob.gwname);
+	                               alert('-------------'+ob); */
+	                            	//添加节点
+	                 			var b = '<li><label>'+"<input type='checkbox' name='xz_tj'><span>"+ob.gwname+'</span></label></li>';
+	                 					
+	                             jq('.pp').append(b);
+	                         });
+		    			},
+		    			error:function(err){
+		    			}
+		    		});
+		    	});
+		      });
+		    	
+		    myDiagram.addDiagramListener("ObjectSingleClicked",function(e){
+		    	var divinfo;
+	            
+		    	var values;
+		       	var objList=myDiagram.selection;
+		       	var jq = jQuery.noConflict();
+
+		    	jq('#jieduan').val('');
+	    		jq('#gongshi').val('');
+	    		jq('#pindu').val('');
+	    		jq('#beizhu').val('输入说明...'); 
+		       	
+		       	objList.each(function(val) {
+		       	values=val.data;
+		       	values=val; 
+		       	/* 切割字符串 */
+		       	 var rt= /(.+)?(?:\(|（)(.+)(?=\)|）)/.exec(values); 
+		       /* 	console.info(rt[2]); */
+		       	/* alert('截取后：'+rt[2]); */
+		       	/* console.log(rt[1]); */
+		       	/* console.log(rt[2]); */
+		       	/* $('#gxmc').style.color=""; */
+		       	 	if(rt[2] == "开始" || rt[2] == "结束") {
+			       		alert('请选中工序节点！');
+			       		document.getElementById("gxsz").value='请选择工序';
+			       		var gxsz=document.getElementById("gxsz").value;
+					    if(gxsz=='请选择工序'){
+					    	jq('#jieduan').val('');
+				    		jq('#gongshi').val('');
+				    		jq('#pindu').val('');
+				    		jq('#beizhu').val('输入说明...');
+				    		return;
+					    }
+			       		return;
+		       		}else{
+		       		//获取离开节点
+		       		//val是获取的节点
+		       		var node=myDiagram.findNodeForKey(val);
+		       		/* alert('node:'+node);
+		       		alert('---------------'+node.findLinksOutOf()); */
+		       		//获取多个个后工序
+		       		var h='\n';
+		       		var hhh=val.findNodesOutOf().each(function(eee){
+		       			var rt1= /(.+)?(?:\(|（)(.+)(?=\)|）)/.exec(eee);
+			       		/* var g=rt1[2].slice(0,rt1[2].length-1); */
+			       		/* alert('---------------从该节点离开：'+g); */
+			       		/*  console.info('---------------从该节点离开：'+rt1[2]); */
+						h+=rt1[2]+' ';
+		       		});
+					//前后工序重用颜色
+		       		var array=['#AC4A9D','#4ABA7F','#E29B49'],index=-1;
+		       		setInterval(function(){
+
+		       			index++;
+
+		       			index=index>array.length-1?0:index;
+
+						document.getElementById('hgx').style.color=array[index];
+
+						},1500)
+						
+			       		 jq('#hgx').val(h);
+		       		 
+		       		/* (var x in ggg) {
+		       		    alert(x); // '0', '1', '2', 'name'
+		       		} */
+		       		//获取进入节点
+		       		/* var node=myDiagram.findNodeForKey(val); */
+		       		/* node.findLinksInto().each(function(link) {console.log(link.data)}; */
+		       		/* console.info('进入'+node.findLinksInto()); */
+		       		//获取单个前工序
+		       		var qg='\n';
+		       		var qqq=val.findNodesInto().each(function(mmm){
+			       		var rt2= /(.+)?(?:\(|（)(.+)(?=\)|）)/.exec(mmm);
+			       		qg+=rt2[2]+' ';
+			       		console.info('---------------从该节点进入：'+rt2[2]);
+		       		});
+
+					setInterval(function(){
+
+					index++;
+
+					index=index>array.length-1?0:index;
+
+					document.getElementById('qgx').style.color=array[index];
+
+					},1100)
+		       		jq('#qgx').val(qg);
+		       		
+			       	divinfo=document.getElementById("divinfo");
+		            divinfo.style.display="block";
+		            /* console.info(divinfo); */
+				    document.getElementById("gxsz").value = rt[2];
+		       		
+		            var gxs=document.getElementById("dierbuname").value;
+		            /* var rr=node.findTreeParentNode(values); */
+				       	/*  *//* console.info(rr); */
+				    
+				    var gxsz=document.getElementById("gxsz").value;
+				    if(gxsz=='请选择工序'){
+				    	jq('#jieduan').val('');
+			    		jq('#gongshi').val('');
+			    		jq('#pindu').val('');
+			    		jq('#beizhu').val('输入说明...');
+			    		return;
+				    }
+				       	
+				       	
+				    var sp = '';
+				    var path=jq('#path').val();
+				    
+				    jq.ajax({
+				    	url:path+'/gongxu/gongxucxhx',
+				    	type:'post',
+				    	data:{'gxs':gxs,'gxsz':gxsz},
+				    	dataType:'json',
+				    	success:function(data){
+				    		console.info(data.gongshi);
+				    		console.info(data.shuoming);
+				    		console.info(data.jieduan);
+				    		console.info(data.pindu);
+				    		jq('#jieduan').val(data.jieduan);
+				    		jq('#gongshi').val(data.gongshi);
+				    		jq('#pindu').val(data.pindu);
+				    		jq('#beizhu').val(data.shuoming);
+				    	}
+				    });
+				    jq.ajax({
+							url:"select_gw_ry",
+							type:"post",
+							data:{
+								scx_name:gxs,
+								gongxu:rt[2]
+							},success:function(data){
+								//
+									var b='';
+									for(var i=0;i<data.length;i++){
+											var zhi = data[i];
+											b+=zhi+",";
+										}
+									/* console.info(b); */
+									b=b.slice(0,b.length-1);
+									/* console.info(b.replace(/,/g,' '));
+									alert(b.replace(/,/g,' ')); */
+									if(b==''){
+										document.getElementById('renyuan').style.color = 'red';
+										jq('#renyuan').val('此生产线的该工序下未设置人员！');
+										return;
+									}
+									var array=['#00A9C9','#F57C4D','#3ED073'],index=-1;
+
+									setInterval(function(){
+
+									index++;
+
+									index=index>array.length-1?0:index;
+
+									document.getElementById('renyuan').style.color=array[index];
+
+									},1100)
+									/* document.getElementById('renyuan').style.color = '#00A9C9'; */
+									jq('#renyuan').val(b.replace(/,/g,' '));
+							}
+						})
+		            
+		       		}
+		       	});
+		    });
+		    
+		
+		    // helper definitions for node templates
+		
+		    function nodeStyle() {
+		      return [
+		        // The Node.location comes from the "loc" property of the node data,
+		        // converted by the Point.parse static method.
+		        // If the Node.location is changed, it updates the "loc" property of the node data,
+		        // converting back using the Point.stringify static method.
+		        new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+		        {
+		          // the Node.location is at the center of each node
+		          locationSpot: go.Spot.Center,
+		          //isShadowed: true,
+		          //shadowColor: "#888",
+		          // handle mouse enter/leave events to show/hide the ports
+		          mouseEnter: function (e, obj) { showPorts(obj.part, true);},
+		          mouseLeave: function (e, obj) { showPorts(obj.part, false);nodeLinkSave();}
+		          
+		        }
+		      ];
+		    }
+			function nodeLinkSave(){
+				var jq = jQuery.noConflict();
+				var path=jq('#path').val();
+				var gxs=document.getElementById("dierbuname").value;
+				var nodelink=returnNodeLink();
+				jq.ajax({
+					url:path+'/gongxu/nodeLinkSave',
+					data:{'gxs':gxs,'nodelink':nodelink},
+					type:'post',
+					dataType:'json',
+					success:function(data){},
+					error:function(){}
+				});
+				
+			}
+			function returnNodeLink(){
+				var nl=myDiagram.model.toJson();
+				return nl;
+			}
+		    function makePort(name, spot, output, input) {
+		      return $(go.Shape, "Circle",
+		               {
+		                  fill: "transparent",
+		                  stroke: null,  // this is changed to "white" in the showPorts function
+		                  desiredSize: new go.Size(15, 15),
+		                  alignment: spot, alignmentFocus: spot,  // align the port on the main Shape
+		                  portId: name,  // declare this object to be a "port"
+		                  fromSpot: spot, toSpot: spot,  // declare where links may connect at this port
+		                  fromLinkable: output, toLinkable: input,  // declare whether the user may draw links to/from here
+		                  cursor: "pointer"  // show a different cursor to indicate potential link point
+		               });
+		    }
+		    function makeletf(name, spot, output, input) {
+		        return $(go.Shape, "Diamond",
+		                 {
+		                    fill: "transparent",
+		                    stroke: null,  // 这在showPorts函数中被改成了"白色"
+		                    desiredSize: new go.Size(8, 8),
+		                    alignment: spot, alignmentFocus: spot,  // 将端口对齐到主形状上
+		                    portId: name,  // 将这个对象声明为一个“端口”
+		                    cursor: "pointer"  // 显示一个不同的光标来指示潜在的链接点
+		                 });
+		      }
+		        function makeright(name, spot, output, input) {
+		        return $(go.Shape, "Rectangle",
+		                 {
+		                    fill: "transparent",
+		                    stroke: null,  // 这在showPorts函数中被改成了"白色"
+		                    desiredSize: new go.Size(8, 8),
+		                    alignment: spot, alignmentFocus: spot,  // 将端口对齐到主形状上
+		                    portId: name,  // 将这个对象声明为一个“端口”
+		                    cursor: "pointer"  // 显示一个不同的光标来指示潜在的链接点
+		                 });
+		      }
+		
+		    // define the Node templates for regular nodes
+		
+		    var lightText = 'whitesmoke';
+		    var tool = myDiagram.toolManager.draggingTool; 
+		      tool.isEnabled=true; 
+		      myDiagram.currentTool =tool; 
+		      tool.doActivate();
+		    myDiagram.nodeTemplateMap.add("",  // the default category
+		      $(go.Node, "Spot", nodeStyle(),
+		        // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+		        $(go.Panel, "Auto",
+		          $(go.Shape, "Ellipse",
+		            { fill: "#00A9C9", stroke: null },
+		            new go.Binding("figure", "figure")),
+		          //设置文本是否可编辑
+		          $(go.TextBlock,
+		            {
+		              font: "bold 14pt Helvetica, Arial, sans-serif",
+		              stroke: lightText,
+		              margin: 8,
+		              maxSize: new go.Size(160, NaN),
+		              wrap: go.TextBlock.WrapFit,
+		              editable: false 
+		            },
+		            new go.Binding("text").makeTwoWay())
+		        ),
+		        // four named ports, one on each side:
+		        makePort("T", go.Spot.Top, false, true),
+		        /* makePort("L", go.Spot.Left, false, false),
+		        makePort("R", go.Spot.Right, false, false), */
+		        /* makeright("R", go.Spot.Right, false, false),
+		        makeletf("L", go.Spot.Left, true, true), */
+		        makePort("B", go.Spot.Bottom, true, false)
+		      ));
+		
+		    myDiagram.nodeTemplateMap.add("Start",
+		      $(go.Node, "Spot", nodeStyle(),
+		        $(go.Panel, "Auto",
+		          $(go.Shape, "Circle",
+		            { minSize: new go.Size(40, 40), fill: "#79C900", stroke: null }),
+		          $(go.TextBlock, "Start",
+		            { font: "bold 17pt Helvetica, Arial, sans-serif", stroke: lightText },
+		            new go.Binding("text"))
+		        ),
+		        // three named ports, one on each side except the top, all output only:
+		        /* makePort("L", go.Spot.Left, false, false),
+		        makePort("R", go.Spot.Right, false, false), */
+		        makePort("B", go.Spot.Bottom, true, false)
+		      ));
+		
+		    myDiagram.nodeTemplateMap.add("End",
+		      $(go.Node, "Spot", nodeStyle(),
+		        $(go.Panel, "Auto",
+		          $(go.Shape, "Circle",
+		            { minSize: new go.Size(40, 40), fill: "#DC3C00", stroke: null }),
+		          $(go.TextBlock, "End",
+		            { font: "bold 17pt Helvetica, Arial, sans-serif", stroke: lightText },
+		            new go.Binding("text"))
+		        ),
+		        // three named ports, one on each side except the bottom, all input only:
+		        makePort("T", go.Spot.Top, false, true)
+		        /* makePort("L", go.Spot.Left, false, false),
+		        makePort("R", go.Spot.Right, false, false) */
+		      ));
+		
+		    myDiagram.nodeTemplateMap.add("Comment",
+		      $(go.Node, "Auto", nodeStyle(),
+		        $(go.Shape, "File",
+		          { fill: "#EFFAB4", stroke: null }),
+		        $(go.TextBlock,
+		          {
+		            margin: 5,
+		            maxSize: new go.Size(200, NaN),
+		            wrap: go.TextBlock.WrapFit,
+		            textAlign: "center",
+		            editable: true,
+		            font: "Arial",
+		            stroke: '#454545'
+		          },
+		          new go.Binding("text").makeTwoWay())
+		        // no ports, because no links are allowed to connect with a comment
+		      ));
+		
+		
+		    // replace the default Link template in the linkTemplateMap
+		    myDiagram.linkTemplate =
+		      $(go.Link,  // the whole link panel
+		        {
+		          routing: go.Link.AvoidsNodes,
+		          curve: go.Link.JumpOver,
+		          corner: 5, toShortLength: 4,
+		          relinkableFrom: true,
+		          relinkableTo: true,
+		          reshapable: true,
+		          resegmentable: true,
+		          // mouse-overs subtly highlight links:
+		          mouseEnter: function(e, link) { link.findObject("HIGHLIGHT").stroke = "rgba(30,144,255,0.2)"; },
+		          mouseLeave: function(e, link) { link.findObject("HIGHLIGHT").stroke = "transparent"; }
+		        },
+		        new go.Binding("points").makeTwoWay(),
+		        $(go.Shape,  // the highlight shape, normally transparent
+		          { isPanelMain: true, strokeWidth: 8, stroke: "transparent", name: "HIGHLIGHT" }),
+		        $(go.Shape,  // the link path shape
+		          { isPanelMain: true, stroke: "gray", strokeWidth: 2 }),
+		        $(go.Shape,  // the arrowhead
+		          { toArrow: "standard", stroke: null, fill: "gray"}),
+		        $(go.Panel, "Auto",  // the link label, normally not visible
+		          { visible: false, name: "LABEL", segmentIndex: 2, segmentFraction: 0.5},
+		          new go.Binding("visible", "visible").makeTwoWay(),
+		          $(go.Shape, "RoundedRectangle",  // the label shape
+		            { fill: "#F8F8F8", stroke: null }),
+		          $(go.TextBlock, "Yes",  // the label
+		            {
+		              textAlign: "center",
+		              font: "10pt helvetica, arial, sans-serif",
+		              stroke: "#333333",
+		              editable: true
+		            },
+		            new go.Binding("text").makeTwoWay())
+		        )
+		      );
+		
+		    // Make link labels visible if coming out of a "conditional" node.
+		    // This listener is called by the "LinkDrawn" and "LinkRelinked" DiagramEvents.
+		    function showLinkLabel(e) {
+		      var label = e.subject.findObject("LABEL");
+		      if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond");
+		    }
+		
+		    // temporary links used by LinkingTool and RelinkingTool are also orthogonal:
+		    myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal;
+		    myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal;
+		
+		    load();  // load an initial diagram from some JSON text加载原有流程
+		
+		    // initialize the Palette that is on the left side of the page
+		    myPalette =
+		      $(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
+		        {
+		          "animationManager.duration": 800, // slightly longer than default (600ms) animation
+		          nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
+		          model: new go.GraphLinksModel([  // specify the contents of the Palette
+		            { category: "Start", text: "开始" },
+		          /*  { text: "工序", figure: "工序" },
+		              { text: "造型", figure: "造型" },
+		              { text: "开板", figure: "开板" },
+		              { text: "裁工", figure: "裁工" },
+		              { text: "打底", figure: "打底" },
+		              { text: "绷工", figure: "绷工" },
+		              { text: "车工", figure: "车工" },
+		              { text: "打孔", figure: "打孔" },
+		              { text: "开料", figure: "开料" },
+		              { text: "海绵", figure: "海绵" }, */
+		            { category: "End", text: "结束" }
+		          ])
+		        });
+		
+		
+		    function customFocus() {
+		      var x = window.scrollX || window.pageXOffset;
+		      var y = window.scrollY || window.pageYOffset;
+		      go.Diagram.prototype.doFocus.call(this);
+		      window.scrollTo(x, y);
+		    }
+		
+		    myDiagram.doFocus = customFocus;
+		    myPalette.doFocus = customFocus;
+		
+		
+		  } 
+		  function showPorts(node, show) {
+		    var diagram = node.diagram;
+		    if (!diagram || diagram.isReadOnly || !diagram.allowLink) return;
+		    node.ports.each(function(port) {
+		        port.stroke = (show ? "white" : null);
+		      });
+		  }
+		    function showalert(node) {
+		        var diagram = node.diagram;
+		            var divinfo;
+		        if (!diagram || diagram.isReadOnly || !diagram.allowLink) return;
+		        /*node.click(function(){
+		            alert('asdasdasd');
+		        });*/
+		        	/* var divinfo;
+		            divinfo=document.getElementById("divinfo");
+		            divinfo.style.display="block";
+		            console.info(divinfo); */
+		      }
+
+		     pe=new Object();
+		     var a ='';
+           function fun(){
+            	/* var a=''; */
+            	var jq = jQuery.noConflict();
+            	var gxs=document.getElementById("dierbuname").value;
+            	var arr = [];
+		      $("[name='xz_tj']:checked").each(function () {
+		          arr.push($(this).next().html());
+				      });
+				      var path=jq('#path').val();
+						jq.ajax({
+							url:path+'/gongxu/updategx.json',
+							type:'post',
+							data:{'arrs':JSON.stringify(arr),'scx':gxs},
+							dataType:'json',
+							success:function(data){
+								/* console.info(data); */
+								jq.each(data, function(dex,ob){
+		                               console.info(ob.gwname);
+		                               
+		                               var node = {};
+		                                node["key"] = ob.gwname;
+			           		    	    node["text"] = ob.gwname;
+			           		    	    /* myDiagram.model.addNodeData(node1); */
+			           		    	    myDiagram.model.addNodeData(node);
+		                         });
+							},
+							error:function(){
+								
+							}
+				
+				});
+		      /* for(i =0;i<arr.length;i++){ */
+		    	  /* alert('--------'+arr[i]); */
+		    	  /* pe='{"key":"dasd",  "text":"asdasda"}'; */
+		    	    /* a='{"key":"gongxu","text":"'+arr[i]+'"}'; */
+		    	    /* alert('--------'+a); */
+		    	    /* var node = {}; */
+		    	    /* var node1={};
+		    	    var node2={};
+		    	    node1["category"] = "kaishi";
+		    	    node1["loc"] = "80 -100";//节点坐标
+		    	    node1["text"] = "开始";
+		    	    
+		    	    node2["key"] = "jieshu";
+		    	    node2["loc"] = "180 -100";//节点坐标
+		    	    node2["category"] = "结束"; */
+		    	    /* node["key"] = arr[i];
+		    	    node["text"] = arr[i]; */
+		    	    /* myDiagram.model.addNodeData(node1); */
+		    	    /* myDiagram.model.addNodeData(node); */
+		    	    /* myDiagram.model.addNodeData(node2) */
+		    	    
+		    	    
+		      	/* }; */
+			}
+           
+           
+			
+		  function load() {
+		    myDiagram.model = go.Model.fromJson(
+		    		{ "class": "go.GraphLinksModel",
+					  "linkFromPortIdProperty": "fromPort",
+					  "linkToPortIdProperty": "toPort",
+					  "nodeDataArray": [
+							{ category: "Start","loc":"80 -100", text: "开始" },
+							{ category: "End","loc":"180 -100", text: "结束" }
+						],
+					  "linkDataArray": [
+					 	]
+		    		});
+		    myDiagram.validCycle = go.Diagram.CycleNotDirected;
+		  }
+		
+		  // add an SVG rendering of the diagram at the end of this page
+		  function makeSVG() {
+		    var svg = myDiagram.makeSvg({
+		        scale: 0.5
+		      });
+		    svg.style.border = "1px solid black";
+		    obj = document.getElementById("SVGArea");
+		    obj.appendChild(svg);
+		    if (obj.children.length > 0) {
+		      obj.replaceChild(svg, obj.children[0]);
+		    }
+		  }
+		  
+		 /*  function scxqk(){
+			  var jq = jQuery.noConflict();
+			  jq('#scxname').click(function(){
+				  newDocument();
+			  });
+		  } */
+		  /* function es(){
+			  
+		  } */
+		  //当点击生产线时重新加载画布
+		  function newDocument(target) {
+				
+			  var jq = jQuery.noConflict();
+			  //解决双击生产线两次才出现画布内容的问题 关键代码
+			 /*  alert(jq(target).text()); */
+			  var path=jq('#path').val();
+			  var gxs=jq(target).text();/* document.getElementById("dierbuname").value; */
+				jq.ajax({
+					url:path+'/gongxu/cxjz.json',
+					type:'post',
+					data:{'scx':gxs},
+					dataType:'json',
+					success:function(data){
+					}
+				});
+				jq.ajax({
+					url:path+'/gongxu/echoNodeLink',
+					data:{'gxs':gxs},
+					type:'post',
+					dataType:'json',
+					success:function(echoNodeLink){
+						/* 如果返回不等于null 则加载画布内的元素 */
+						if(echoNodeLink !=''){
+							myDiagram.model = new go.GraphLinksModel();
+							resetModel();
+							load();
+							/* console.info('---------'+echoNodeLink);
+							console.info('+++++++++'+echoNodeLink.nodelink); */
+							myDiagram.model = go.Model.fromJson(echoNodeLink.nodelink);
+						}else{
+							myDiagram.model = new go.GraphLinksModel();
+							resetModel();
+							load();
+						}
+					},error:function(err){
+					}
+				});
+			  
+			}
+		  /* function nodeLink(flowchart){
+			  myDiagram.model = go.Model.fromJson(flowchart);
+		  } */
+
+			function resetModel() {
+			  myDiagram.model.undoManager.isEnabled = true;
+			  myDiagram.model.linkFromPortIdProperty = "fromPort";
+			  myDiagram.model.linkToPortIdProperty = "toPort";
+					
+			  myDiagram.model.copiesArrays = true;
+			  myDiagram.model.copiesArrayObjects = true;
+			  myDiagram.isModified = false;
+			}
+			
+			// 
+			
+			function checkLocalStorage() {
+			  return (typeof (Storage) !== "undefined") && (window.localStorage !== undefined);
+			}
+			//返回自定义文件名
+			function getCurrentFileName() {
+				  var currentFile = document.getElementById("currentFile");
+				  var name = currentFile.textContent;
+				  if (name[name.length - 1] === "*") return name.substr(0, name.length - 1);
+				  return name;
+				}
+			// 另存
+			function saveDocumentAs() {
+			  if (checkLocalStorage()) {
+			    var saveName = prompt("保存文件...", getCurrentFileName());
+			    if (saveName && saveName !== UnsavedFileName) {
+			      setCurrentFileName(saveName);
+			      saveDiagramProperties()
+			      window.localStorage.setItem(saveName, myDiagram.model.toJson());
+			      myDiagram.isModified = false;
+			    }
+			  }
+			}
+			
+			function openElement(id, listid) {
+				  var panel = document.getElementById(id);
+				  if (panel.style.visibility === "hidden") {
+				    updateFileList(listid);
+				    panel.style.visibility = "visible";
+				  }
+				}
+			function updateFileList(id) {
+				  var listbox = document.getElementById(id);
+				  var last;
+				  while (last = listbox.lastChild) listbox.removeChild(last);
+				  for (var key in window.localStorage) {
+				    var storedFile = window.localStorage.getItem(key);
+				    if (!storedFile) continue;
+				    var option = document.createElement("option");
+				    option.value = key;
+				    option.text = key;
+				    listbox.add(option, null);
+				  }
+				}
+			// 打开
+			function openDocument() {
+				alert(myDiagram.model.toJson());
+			  if (checkLocalStorage()) {
+			    if (myDiagram.isModified) {
+			      var save = confirm("您是否愿意将更改保存到 " + getCurrentFileName() + "?");
+			      if (save) {
+			    	  saveDocument();
+			      }
+			    }
+			    openElement("openDocument", "mySavedFiles");
+			  }
+			}
+			var UnsavedFileName = "(Unsaved File)";
+			// 在模型中存储共享模型状态。modelData
+			// （将由loadDiagramProperties加载）
+			function saveDiagramProperties() {
+			  myDiagram.model.modelData.position = go.Point.stringify(myDiagram.position);
+
+		      console.info(myDiagram.model.toJson());
+			}
+			
+			// 保存到本地
+			function saveDocument() {
+			  if (checkLocalStorage()) {
+			    var saveName = getCurrentFileName();
+			    if (saveName === UnsavedFileName) {
+			      saveDocumentAs();
+			      alert(myDiagram.model.toJson());
+
+			      console.info(myDiagram.model.toJson());
+			    } else {
+			      saveDiagramProperties()
+			      window.localStorage.setItem(saveName, myDiagram.model.toJson());
+			      myDiagram.isModified = false;
+			      alert(myDiagram.model.toJson());
+			      console.info(myDiagram.model.toJson());
+			    }
+			  }
+			}
+		</script>
+</head>
+    <script type="text/jscript" charset="utf-8">
+    </script>
+	</head>
+	<body onload="init()">
+			<!-- <input type="button" value="清空" onclick="newDocument()"/> -->
+		<%-- <div class="top">
+			<div class="row top-content" style="margin: 0;">
+				<img class="imgaa col-xs-1"  src="images/LOGO-1.jpg">
+       			<p class="col-xs-3"></p>
+       			<i class="col-xs-2">
+       				<%=session.getAttribute("worker_name") %>
+       				<strong class="zhiwei">职位</strong>
+       			</i>
+       			<b class="col-xs-3">工序设置</b>
+       			<button class="col-xs-2 btn btn-info btn-sm"  onclick="window.location.href='exit'">退出</button>
+  		  	</div>
+		</div> --%>
+		<div style="margin-top:20px;"></div>
+		
+		<div class="an" style="margin-left:1%;">
+		<h4>已有生产线(生产工序)
+		<c:forEach items="${scx}" var="item">
+			 <a style="text-decoration:none;" href="${pageContext.request.contextPath}/gongxu/huixianscx?proDucTionLine=${item.gongxuId}&proDucTionLinename=${item.gongxuType}">
+			 	<button class="btn btn-primary" id="${item.gongxuId}" style="height: 29px;">${item.gongxuType}</button>
+			 </a>	
+	    </c:forEach></h4>
+	    <script type="text/javascript">
+	    </script>
+		</div>
+		<div class="tjnr">
+		<div class="gxname">
+			<label style="margin-top: 2px;">第一步：请筛选所需工序名称：</label>
+			
+			
+			<!-- <button type="button" class="btn btn-primary" id="queding">保存第一步</button> -->
+		</div>
+			<div style="display: inline-flex;margin-left:0%; height: 90px;width: 100%; "> 
+				<!-- <div class="aaa ddf"> 
+					<div>
+						<ul class="ff" id="ff_id">
+								
+					        
+						</ul>
+					</div>
+					
+				</div> -->
+					<!-- <button type="button" class="btn btn-primary" id="gongxu_shanchu">往左<br />方框<br />移出<br />——></button> -->
+		
+					<%-- <button type="button" class="btn btn-primary" id="gongxu_tianjia" onclick="fun()">往下<br />画布<br />移入<br /><img alt="下移入" title="下移入" src="${pageContext.request.contextPath}/upload/xia.png"></button> --%>
+				<div class="aaa" style=" width:80%; height: 100%;">
+		        	<ul id="myTab" class="nav nav-tabs">
+		        		<c:forEach items="${bmName}" var="item">
+			 				<li class="bm_xz" p="${item}" ><a href="null" data-toggle="tab" name="scxname" id="scxname" class="scxname" onclick="newDocument(this)">${item}</a></li>
+	    				</c:forEach>
+					    
+					<!-- <script type="text/javascript">
+						$('#scxname').click(function(){
+							alert(document.getElementById("dierbuname").value);
+						});
+					</script> -->
+					     
+					</ul>
+					<div id="myTabContent" class="tab-content">
+					    <div class="tab-pane fade in active" id="xjj"> 
+                            <p>
+					        	<ul class="pp">
+				        				<li class="gx_tianjia"><p style="font: '微软雅黑'; color:red;">点击上面进行选择<img alt="点击上面的生产线   ↑↑↑！"  title="点击上面的生产线   ↑↑↑！" src="${pageContext.request.contextPath}/upload/shouzhishi.gif" style="margin-top: -20px;" height="40px" width="40px"></p></li>
+				        			<c:forEach items="${allList}" var="item">	
+				        				<label><li class="gx_tianjia" style="width:1%;"><input type="checkbox" name="xz_tj"  value="${item}" id="xz_tj"/><span>${item}</span></li></label>			        			
+				        			</c:forEach>
+					        	</ul>
+					    </div>
+					    
+					    <div class="tab-pane fade" id="zfq" style="margin-left: 5%;">
+					        <p>
+					        	<ul class="pp">
+					        		<c:forEach items="${zidian_xj}" var="item">
+					        			<li><input type="checkbox" name="xz_dx"  value="${item.name}"/><span>${item.name}</span></li>
+					        		</c:forEach>
+					        	</ul>
+					        </p>
+					    </div>
+					    <div class="tab-pane fade" id="xs">
+					        <p></p>
+					    </div>
+					</div>
+		        </div>
+		       <!-- <button style="height: 100%;" type="button" class="btn btn-primary" id="gongxu_tianjia" onclick="fun()"> -->
+		       <a style="margin-top: 1%; margin-left: 0.4%;" href="#" id="gongxu_tianjia" onclick="fun()"><img alt="向下移入"  title="向下移入" src="${pageContext.request.contextPath}/upload/xia.png"></a><!-- </button> -->
+			</div>
+		
+			<div style="margin-top: 28px;">
+				<div class="gxname" id='dierbu'>
+					<label id="diername">
+						<label>第二步：当前设置工序 →<input style="border:none;width: 120px;text-align: center;" class="gongxu_mc" value="${gongxuName}" placeholder="生产线" disabled="disabled" id="dierbuname" type="text" autocomplete="off"/>&nbsp;&nbsp;(<span style="color:red;">请先完成上一步操作!</span>)
+							
+						</label>
+					        
+					</label>
+					<span style="float:right;color: crimson;background-color:yellow;margin-right:0%; font-size: 16px;" class="caozuotishi">操作指南</span>
+				        	<div style="display:none;float:right;margin-right:0%;width: auto;" class="tishi">
+				            	<span style="color: crimson;background-color:yellow;margin-left:0%; font-size: 13px;">   
+				                ① Ctrl + Z 可撤销操作</span><br/>
+					            <span style="color: crimson;background-color:yellow;margin-left:0%; font-size: 13px;">   
+					                ② 选中元素后按Delete(删除键)删除当前工序</span><br/>
+					            <span style="color: crimson;background-color:yellow;margin-left:0%; font-size: 13px;">   
+					                ③ Ctrl + 鼠标滑动轮 可进行放大缩小</span><br/>
+				                <span style="color: crimson;background-color:yellow;margin-left:0%; font-size: 13px;">   
+					                ④ 鼠标左键双击连线 再使用Delete(删除键)可删除</span><br/>
+				            </div> 
+				</div>	
+			</div>
+			<table style="width: 100%;border:solid red 1px;" class="qq" >
+				<tr style="text-align: left;">
+					        <style type="text/css">
+				       			.qq tr{border:solid #000000 1px;text-align: center;}
+				       			.qq td{border:solid #000000 1px; width:60%;}
+				       			.qq th{text-align: center;width:40%;} 
+				       		</style>
+					<td>
+						<!-- <div id="sample"style="width:100%;"> -->
+						 <div style="width:100%; white-space:nowrap;">
+						 <span style="display: inline-block; vertical-align: top; width:10%;" class="two">
+								<div id="myPaletteDiv" style=" height: 720px; width:100%;" >
+								</div>
+							<style type="text/css">
+								*{
+									margin: 0px;
+									padding: 0px;
+								}
+							        .two{
+							            float: left;
+							            margin-left: 0px;
+							            border: solid #000000 0.5px;
+							            border-top: solid 1px black;
+							            border-bottom: solid 1px black;
+							            border-left: solid 1px black
+							        }
+							      canvas{border: 0px;outline:none;} 
+							      /* table,table tr th, table tr td { border:1px solid #0094ff; } */
+						    </style>
+						</span>
+						<span style="display: inline-block; vertical-align: top; width:90%">
+							<div id="myDiagramDiv" style="background-color:#E9EEE7; border: solid 1px #000000;border-left:solid #000000 0.5px; height: 722px">
+						
+							</div>
+						</span>
+					</div>
+			</td>
+			<td style="width: 15%; ">
+				<style type="text/css">
+			        .divinfo{
+			          /*  float: left; */
+			
+			            /* margin-right:-9.6%;
+			            margin-top: -42.15%; */
+			
+			            /* display: none; */
+			        }
+			    </style>
+			    <div id="divinfo">
+			       <form action="#" id="form" name="form" class="form" method="post">
+			       		<style type="text/css">
+			       			.ww tr{border:solid #0094ff 1px;text-align: center;}
+			       			.ww td{border:solid #0094ff 1px; width:70%;}
+			       			.ww th{text-align: center;width:30%;} 
+			       		</style>
+			       		<table style="border:solid 1px #0094ff;width:98%; margin-top:0%;height:100%; margin-left: 1%;" class="ww" >
+			       			<tr>
+			       				<th colspan="2" style=" font-size: 18px;border:solid 1px #0094ff">属&nbsp;&nbsp;&nbsp;性</th>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff"><label>工序名</label></th>
+			       				<td><span  id="gxmc1"  class="gxmc1"><input type="text" id="gxsz" style="outline:none;width:100%;text-align: center;border:none;" class="gxsz" name="gxsz" placeholder="选择工序名称" readonly="readonly" disabled="disabled"/></span></td>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff"><label>阶段</label></th>
+			       				<td>
+				       				<input style="border:solid 0px #0094ff;outline:none;width: 100%;" type="text" name="jieduan" id="jieduan" class="jieduan" placeholder="请输入天数(数字)" onkeyup="value=value.replace(/\D/gi,'')" maxlength="3"/>
+			          		   </td>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff"><label>工时</label></th>
+			       				<td>
+			       					<input style="outline:none;border:solid 0px #0094ff;width: 100%;" type="text" name="gongshi" id="gongshi" class="gongshi" placeholder="请输入时间(小时)" onkeyup="value=value.replace(/\D/gi,'')" maxlength="3"/>
+			          			</td>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff"><label>频度</label></th>
+			       				<td>
+				       				<input style="outline:none;border:solid 0px #0094ff;width: 100%;" type="text" name="pindu" id="pindu" class="pindu" placeholder="请输入频度(件数)" onkeyup="value=value.replace(/\D/gi,'')" maxlength="3"/>
+			           			</td>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff"><label>说明</label></th>
+			       				<td><textarea name="beizhu" id="beizhu" class="beizhu" style="outline:none;border:solid 0px #0094ff;text-align: left; resize:none; height: 80px; width: 100%;">输入说明...</textarea></td>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff">前工序</th>
+			       				<td><textarea name="qgx" id="qgx"  class="qgx" style="outline:none;border:solid 0px #0094ff;text-align: left;border:0px; resize:none; height: 60px; width: 100%; color:red;" disabled="disabled">                       前工序</textarea></td>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff">后工序</th>
+			       				<td><textarea name="hgx" id="hgx"  class="hgx" style="outline:none;border:solid 0px #0094ff;text-align: left; resize:none; height: 60px; width: 100%; color:red;" disabled="disabled">                       后工序</textarea></td>
+			       			</tr>
+			       			<tr>
+			       				<th style="border:solid 1px #0094ff"><label>人员</label></th>
+			       				<td><textarea name="renyuan" id="renyuan"  class="renyuan" style="outline:none;border:solid 0px #0094ff;text-align: left; resize:none; height: 300px; width: 100%; font-size: 16px;color:red;" disabled="disabled">                请点击工序！</textarea>
+			       				</td>
+			       			</tr>
+			       		</table>
+			       		<div style="margin-top: 18px;">
+			       			 <input style="margin-left: 25%; width:20%;" type="button" name="submit" class="btn btn-primary" id="submit" value="保存"/>
+			                 <input style="margin-left: 10%; width:20%;"type="button" class="btn btn-primary" id="quxiao"  name="quxiao" value="取消"/>
+			       		</div>
+			       </form>
+			       </div>
+				</td>
+			</tr>
+		</table>
+			<!-- </div> -->
+		
+			<div class="gxname" style="margin-top: 28px;">
+				    <label>第三步：选择生产类型后, 保存车间所设置的工序</label>
+				    <select class="gongxutype">
+						<option selected="selected" style="display: none;" value="-1">选择生产类型</option>
+						<option value="1">非批量生产</option>
+						<option value="0">批量生产</option>
+					</select>
+				<!-- 	<button class="btn btn-primary btn-lg baocun">保存</button> -->
+					<button class="btn btn-primary btn-lg bc" onclick="bcds()">保存</button>
+					<script type="text/javascript">
+						function bcds(){
+							var path=$('#path').val();
+			  			  	var gxs=document.getElementById("dierbuname").value;
+			  				var sfpl=$('.gongxutype').val();//判断批量与非批量
+			  			  	if(gxs == '生产线'){
+			  			  		alert('请选择生产线！');
+			  			  		return;
+			  			  	}
+			  			  	if(!/[^\s]+/.test(gxs)){
+			  			  		alert('请选择生产线！');
+			  			  		return;
+			  			  	}
+			  			  	if(sfpl=='-1'){
+			  			  		alert('请选择 批量 与 非批量 生产！');
+			  			  		return;
+			  			  	}
+							 $.ajax({
+									url:path+'/gongxu/selectgongxuzt',
+									data:{'gxs':gxs},
+									type:'post',
+									dataType:'json',
+									success:function(data){
+										if(data.result){
+											$.ajax({
+												url:path+'/gongxu/baocunscx',
+												data:{'gxs':gxs,'sfpl':sfpl},
+												type:'post',
+												dataType:'json',
+												success:function(ddd){
+													if(ddd.result){
+														alert('当前生产线( '+gxs+' )保存数据成功！');
+														window.location.href="Gongxushezhi";
+														
+													}else{
+														alert('保存数据异常，请联系管理人员！');
+													}
+												}
+											});
+										}else{
+											$.ajax({
+												url:path+'/gongxu/selectgongxus',
+												data:{'gxs':gxs},
+												type:'post',
+												dataType:'json',
+												success:function(list){
+													var mm='';
+													for(var i=0;i<list.length;i++){
+														mm+=list[i].gongxuname+'   ';
+													}
+													confirm('该生产线下的工序有未设置的，请继续完成工序设置！\n以下工序未设置：\n   '+mm);
+												}
+											});
+										}
+									}
+								});
+						}
+						/* function szwc(){
+							var re=false;
+							var path=$('#path').val();
+			  			  	var gxs=document.getElementById("dierbuname").value;
+							
+							 alert('........................'+re);
+						} */
+					</script>
+					<button class="btn btn-primary btn-lg">取消</button>
+					
+			</div>
+		</div>	
+		<!--选择工序名称-->
+		<div class="modal fade" id="myModa4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title" id="myModalLabel">选择工序(单选)</h4>
+		            </div>
+		            <div class="modal-body">
+		           	<!--
+                       	作者：offline
+                       	时间：2018-04-28
+                       	描述：
+                      
+		         		    <ul id="myTab" class="nav nav-tabs">
+							    <li class="active"><a href="#yi" data-toggle="tab">沙发工序</a></li>
+							    <li><a href="#er" data-toggle="tab">小件工序</a></li>
+							    <li><a href="#san" data-toggle="tab">软床</a></li>
+							</ul>
+							 -->
+							<div id="myTabContent" class="tab-content diyige">
+							    <div class="tab-pane fade in active" id="yi">
+							        <p class="mtk"></p>
+							    </div>
+							    <div class="tab-pane fade" id="er">
+							        <p></p>
+							    </div>
+							     <div class="tab-pane fade" id="san">
+							        <p></p>
+							    </div>
+							</div>
+		           	</div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		                <button type="button" class="btn btn-primary qr" data-dismiss="modal">确认提交</button>
+		            </div>
+		        </div><!-- /.modal-content -->
+		    </div><!-- /.modal -->
+		</div>
+		<!--前工序模态框-->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title" id="myModalLabel">选择前工序(可多选)</h4>
+		            </div>
+		            <div class="modal-body">
+		            	<!--
+                        	作者：offline
+                        	时间：2018-04-28
+                        	描述：
+                        
+		            	<ul id="myTab" class="nav nav-tabs">
+						    <li class="active"><a href="#four" data-toggle="tab">沙发工序</a></li>
+						    <li><a href="#five" data-toggle="tab">小件工序</a></li>
+						    <li><a href="#sex" data-toggle="tab">软床</a></li>
+						</ul>
+						-->
+						<div id="myTabContent" class="tab-content">
+						    <div class="tab-pane fade in active" id="four">
+						     <!--  <button type="radio" class="btn btn-primary btn-xs kaishi">开始</button> -->
+						     <label><input value="开始" type="checkbox" name="one" class="btn btn-primary btn-xs kaishi">开始</label>
+						        <p class="qiangongxu"></p>
+						    </div>
+						    <div class="tab-pane fade" id="five">
+						        <p></p>
+						    </div>
+						    <div class="tab-pane fade" id="sex">
+						        <p></p>
+						    </div>
+		           		</div>
+		           	</div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		                <button type="button" class="btn btn-primary qrtj" data-dismiss="modal">确认提交</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!--后工序模态框-->
+		<div class="modal fade" id="myModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title" id="myModalLabel">选择后工序(可多选)</h4>
+		            </div>
+		            <div class="modal-body">
+		 
+						<div id="myTabContent" class="tab-content">
+						    <div class="tab-pane fade in active" id="seven">
+						    <!--  <button type="button" class="btn btn-primary btn-xs jieshu">结束</button> -->
+						      <label><input value="结束" type="checkbox" name="one" class="btn btn-primary btn-xs jieshu">结束</label>
+						        <p class="hougongxu"></p>
+						    </div>
+						    <div class="tab-pane fade" id="eight">
+						        <p></p>
+						    </div>
+						     <div class="tab-pane fade" id="nine">
+						        <p></p>
+						    </div>
+						</div>
+		           	</div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		                <button type="button" class="btn btn-primary qrtj1" data-dismiss="modal">确认提交</button>
+		            </div>
+		        </div><!-- /.modal-content -->
+		    </div><!-- /.modal -->
+		</div>
+		<!--人员列表模态框-->
+		<div class="modal fade" id="myModa3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                <h4 class="modal-title" id="myModalLabel">人员列表</h4>
+		            </div>
+		            <div class="modal-body">
+		            	
+						<div id="myTabContent" class="tab-content">
+						    <div class="tab-pane fade in active" id="ten">
+						        <p id="renyuanliebiao">
+						        	
+						        </p>
+						    </div>
+						    <div class="tab-pane fade" id="eleven">
+						        <p></p>
+						    </div>
+						     <div class="tab-pane fade" id="twelve">
+						        <p></p>
+						    </div>
+						</div>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		                <button type="button" class="btn btn-primary qrtj2" data-dismiss="modal">确认提交</button>
+		            </div>
+		        </div><!-- /.modal-content -->
+		    </div><!-- /.modal -->
+		</div>
+				
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js" ></script>
+		<script type="text/javascript" src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/gongxu.js"></script>
+		<script>
+			$('#renyuan').on('click',function(){
+				var bumenName = $('#dierbuname').val();
+				$.ajax({
+					type:"post",
+					url:"queryBuMenRenYuan",
+					data :{
+						bumenName :bumenName,
+					},
+					success : function(result){
+						
+						if(result.length==0){
+							alert("没有人员，请去添加人员！！！")
+						}else{
+							var renyuan = '';
+							$.each(result, function(i,v) {
+							renyuan = '<input type="checkbox" name="three" value="'+v+'"/>'+v;
+							$('#renyuanliebiao').append(renyuan);
+						});
+						}
+					}
+				});
+				
+			})
+			
+			
+		</script>
+		<script type="text/javascript">
+			/* $(".yidong").children(".mb").children(".gxsz")on("change",function(){
+				var scx_name=$(".gongxu_mc").val();
+				var gongxu=$(this).val();
+				alert(scx_name+"  ,  "+gongxu);
+			}) */
+		
+			/* $(".bc").click(function(){
+				var gongxuId = $('.i').text();
+				var gongxuType = $('.gongxu_mc').val();
+				var gongxuleibie  =$('.gongxutype').val();//判断批量与非批量
+				var bumentype = '';
+				var a = $('.gxsz');
+				var gongxus = '';
+				for(var i=1;i<a.length;i++){
+					gongxus += a[i].innerHTML+",";
+				}
+				if(gongxuleibie=='' || gongxuleibie==null || gongxuleibie=='选择生产类型'){
+					alert('请选择生产类型！！！！');
+				}else{
+					//alert(gongxuId+"  "+gongxuType+"   "+gongxuleibie+"   "+gongxus);
+						$.ajax({
+							url:"gongxushezhi_end_save",
+							type:"post",
+							data:{
+								gongxus:gongxus,
+								gongxuId:gongxuId,
+								gongxuType:gongxuType,
+								bumentype:bumentype,
+								gongxuleibie:gongxuleibie
+							},
+							success:function(re){
+								for(var i=0;i<re.length;i++){
+									if(re[i].tishi == 'succ'){
+										alert("保存成功！");
+										window.location.href="Gongxushezhi";
+									}else{
+										alert(re[i].tishi);
+									}
+								}
+							}
+						})
+				}
+			}) */
+		</script>
+		
+  		  	<input value="${pageContext.request.contextPath}" id="path" name="path" class="path" disabled="disabled" type="hidden"/>
+</html>
