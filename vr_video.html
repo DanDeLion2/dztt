@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>测试视频</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <style>
+
+        #example {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+    </style>
+
+</head>
+<body>
+<!-- <input type="button" value="全景格陵兰岛风景" title="切换视频" class="vido1"/>
+<input type="button" value="软体配色" title="切换视频" class="vido2"/>
+<input type="button" value="长城之美" title="切换视频" class="vido3"/> -->
+    <div id="ex" style="width: 600px;height: 800px; border: 2px solid red;">
+        <div id="example" style="width: 500px;height: 600px; border: 2px solid red; border: 2px solid red;"></div>
+    adshgggggggggggggavchgavshcccccccccccccccccccccccccccc
+    </div>
+<script src="js/three.js"></script>
+<script src="js/mxreality.js"></script>
+<script>
+
+
+    window.onload=function () {
+        init();
+    }
+    //var vr=new VR(scene,renderer,container);
+    function init() {
+       var img_id="img/538749b6aac79.jpgd";
+       /*var img_id="vo/qqqqqqqqqqqqq.mp4";*/
+        var fileurl=img_id;
+        var index= img_id.indexOf(".");
+        img_id=img_id.substring(index); 
+        if(img_id!=".bmp"&&img_id!=".png"&&img_id!=".gif"&&img_id!=".jpg"&&img_id!=".jpeg"||img_id!=".mp4"&&img_id!=".rmvb"&&img_id!=".avi"&&img_id!=".ts"){
+            alert("该文件无法播放，请联系管理员查看文件是否损坏或格式不支持！");
+            return;
+           }
+        if(img_id!=".bmp"&&img_id!=".png"&&img_id!=".gif"&&img_id!=".jpg"&&img_id!=".jpeg"){  //根据后缀，判断是否符合图片格式
+                if(img_id!=".mp4"&&img_id!=".rmvb"&&img_id!=".avi"&&img_id!=".ts"){ //根据后缀，判断是否符合视频格式
+                   document.getElementById('movie_tv').value="";   // 不符合，就清除，重新选择
+                 }else{
+                        var  scene, renderer;
+                        var container;
+                        //renderer = new THREE.WebGLRenderer();
+                        AVR.debug=true;
+                        if( !AVR.Broswer.isIE() && AVR.Broswer.webglAvailable() ) {
+                            renderer = new THREE.WebGLRenderer();
+                        }else {
+                            renderer = new THREE.CanvasRenderer();
+                        }
+                        renderer.setPixelRatio( window.devicePixelRatio );
+                        container = document.getElementById('example');
+                        container.appendChild(renderer.domElement);
+
+
+
+                        scene = new THREE.Scene();
+
+                        var vr=new VR(scene,renderer,container,{"fov":50});
+
+                        //vr.playText="<img src='img/play90.png' width='40' height='40'/>";
+                        vr.vrbox.radius=600;
+                        if(AVR.isCrossScreen()) {
+                            vr.effect.separation=1.2;
+                        }
+
+                        //AVR.useGyroscope=false;
+                        vr.init();
+                        /* var vido;
+                        var vido1=document.getElementsByClassName("vido1");
+                        var vido2=document.getElementsByClassName("vido2");
+                        var vido3=document.getElementsByClassName("vido3");
+                        vido1.addEventListener("click", function() {
+                            alert('播放全景格陵兰岛风景');
+                        });
+                         */
+                            vr.openAudio=true;
+                            vr.audio;
+                            vr.videoToolBar;
+                            vr.defaultVoiceHideLeftTime=2;
+                            vr.defaultVolume=0.5;
+
+                        vr.playPanorama(fileurl,vr.resType.video,vr.resType.openAudio);
+                        //vr.playPanorama('http://ov4hj29xx.bkt.clouddn.com/panovideo/960p.mp4',vr.resType.video);
+                        vr.video.setAttribute("loop","loop");
+                        vr.video.crossOrigin="Anonymous";
+                        vr.loadProgressManager.onLoad=function () {
+                            vr.video.muted=false;
+
+                            vr.VRObject.getObjectByName("__panoContainer").visible = true;
+                        }
+
+                        vr.video.onended=function () {
+                        }
+                 }
+        }else{
+            var  scene, renderer;
+            var container;
+            renderer = new THREE.WebGLRenderer();
+            container = document.getElementById('example');
+            container.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+            var vr=new VR(scene,renderer,container,{'fov':60});
+            vr.vrbox.radius=50;
+            vr.init();
+            if(!AVR.isCrossScreen()) {
+                vr.useGyroscope = false;
+            }
+            vr.loadProgressManager.onLoad=function () {
+                vr.VRObject.getObjectByName("__panoContainer").visible = true;
+                //vr.controls.enable=false;
+            }
+            vr.loadProgressManager.onProgress=function () {
+                console.log("onProgress")
+            }
+            vr.loadProgressManager.onError=function () {
+                console.log("onError")
+            }
+            vr.playPanorama(fileurl);
+
+              }
+              
+              
+              
+        
+
+    }
+
+
+</script>
+</body>
+<input value="${pageContext.request.contextPath}" id="path" name="path" class="path" disabled="disabled" type="hidden"/>
+
+</html>
